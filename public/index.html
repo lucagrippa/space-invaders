@@ -32,7 +32,30 @@
             move, shift to shoot. </footer>
     </div>
     <script src="assets/js/game.js" type="text/javascript"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
 
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyAfTo86aJG192IYP1TOKHZbUm6AHvHpE14",
+            authDomain: "space-invaders-d8cf6.firebaseapp.com",
+            databaseURL: "https://space-invaders-d8cf6.firebaseio.com",
+            projectId: "space-invaders-d8cf6",
+            storageBucket: "space-invaders-d8cf6.appspot.com",
+            messagingSenderId: "962883281352",
+            appId: "1:962883281352:web:62602fe7dc3d0ee054a0fd",
+            measurementId: "G-D06CHZ3E9T"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
 </body>
 
 </html>
