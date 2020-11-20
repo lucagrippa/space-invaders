@@ -24,15 +24,21 @@ const PLAYER_MAX_SPEED = 250;
 // Laser Constants
 const LASER_MAX_SPEED = 300;
 const LASER_COOLDOWN = 0.25;
+const LASER_LENGTH = 27;
 
 // Enemy Constants
 const ENEMIES_PER_ROW = 10;
 const ENEMY_HORIZONTAL_PADDING = 80;
 const ENEMY_VERTICAL_PADDING = 70;
 const ENEMY_VERTICAL_SPACING = 80;
+const ENEMY_COOLDOWN = 10.0;
 
 const GAME_STATE = {
     lastTime: Date.now(),
+    gameOver: false,
+    playersRemaining: 2,
+    player1Remaining: true,
+    player2Remaining: true,
 
     // Player 1
     score1: 0,
@@ -59,7 +65,8 @@ const GAME_STATE = {
     lasers2: [],
 
     // Enemies
-    enemies: []
+    enemies: [],
+    enemyLasers: []
 };
 
 function objectsIntersect(o1, o2) {
@@ -99,13 +106,19 @@ function clampY(yloc, ymin, ymax) {
     }
 }
 
-/*------------ CREATE FUNCTIONS ------------*/
+function rand(min, max) {
+    if (min === undefined) min = 0;
+    if (max === undefined) max = 1;
+    return min + Math.random() * (max - min);
+}
+
 
 function createScoreboard($container) {
     const $scoreboard = document.createElement("section");
     const $gameWrapper = document.querySelector(".game-wrapper");
     $scoreboard.className = "scoreboard";
-    $scoreboard.innerHTML = "Player 1:  " + GAME_STATE.score1 + " pts -  Player 2:  " + GAME_STATE.score2 + " pts";
+    $scoreboard.innerHTML = "Player 1:  <strong>" + GAME_STATE.score1 +
+        " pts</strong> -  Player 2:  <strong>" + GAME_STATE.score2 + " pts</strong>";
     $gameWrapper.insertBefore($scoreboard, $gameWrapper.childNodes[0]);
 }
 
@@ -171,10 +184,25 @@ function createEnemy($container, xloc, yloc) {
     const enemy = {
         xloc,
         yloc,
+        cooldown: rand(0.5, ENEMY_COOLDOWN),
         $element
     };
     GAME_STATE.enemies.push(enemy);
     setPosition($element, xloc, yloc);
+}
+
+function createEnemyLaser($container, x, y) {
+    const $element = document.createElement("img");
+    $element.src = "assets/images/laser/laser-red-7.png";
+    $element.className = "enemy-laser";
+    $container.appendChild($element);
+    const laser = {
+        x,
+        y,
+        $element
+    };
+    GAME_STATE.enemyLasers.push(laser);
+    setPosition($element, x, y);
 }
 
 function init() {
@@ -195,6 +223,14 @@ function init() {
         }
     }
 
+}
+
+function playerHasWon() {
+    return GAME_STATE.enemies.length === 0;
+}
+
+function playerHasLost() {
+    return GAME_STATE.playersRemaining === 0;
 }
 
 /*------------ UPDATE FUNCTIONS ------------*/
@@ -366,9 +402,63 @@ function updateEnemies(deltaTime, $container) {
         const xloc = enemy.xloc + dx;
         const yloc = enemy.yloc + dy;
         setPosition(enemy.$element, xloc, yloc);
+        enemy.cooldown -= deltaTime;
+        if (enemy.cooldown <= 0) {
+            createEnemyLaser($container, xloc, yloc);
+            enemy.cooldown = ENEMY_COOLDOWN;
+        }
     }
 
     GAME_STATE.enemies = GAME_STATE.enemies.filter(e => !e.isDead);
+
+    if (playerHasWon()) {
+        GAME_STATE.gameOver = true;
+        document.querySelector(".congratulations").style.display = "block";
+        return;
+    }
+
+    if (playerHasLost()) {
+        GAME_STATE.gameOver = true;
+        document.querySelector(".game-over").style.display = "block";
+        return;
+    }
+}
+
+function updateEnemyLasers(deltaTime, $container) {
+    const lasers = GAME_STATE.enemyLasers;
+    for (let i = 0; i < lasers.length; i++) {
+        const laser = lasers[i];
+        laser.y += deltaTime * LASER_MAX_SPEED;
+        if (laser.y > GAME_HEIGHT - LASER_LENGTH) {
+            destroyLaser($container, laser);
+        }
+        setPosition(laser.$element, laser.x, laser.y);
+        const o1 = laser.$element.getBoundingClientRect();
+
+        if (GAME_STATE.player1Remaining) {
+            // Test if player1 was hit
+            const player1 = document.querySelector(".player1");
+            const o2 = player1.getBoundingClientRect();
+            if (objectsIntersect(o1, o2)) {
+                // Player1 was hit
+                GAME_STATE.player1Remaining = false;
+                destroyPlayer($container, player1);
+                break;
+            }
+        }
+        // Test if player2 was hit
+        if (GAME_STATE.player2Remaining) {
+            const player2 = document.querySelector(".player2");
+            const o3 = player2.getBoundingClientRect();
+            if (objectsIntersect(o1, o3)) {
+                // Player 2 was hit
+                GAME_STATE.player2Remaining = false;
+                destroyPlayer($container, player2)
+                break;
+            }
+        }
+    }
+    GAME_STATE.enemyLasers = GAME_STATE.enemyLasers.filter(e => !e.isDead);
 }
 
 function update() {
@@ -377,10 +467,22 @@ function update() {
 
     const $container = document.querySelector(".game");
 
-    updatePlayer1(deltaTime, $container);
-    updatePlayer2(deltaTime, $container);
+    if (GAME_STATE.gameOver) {
+        return;
+    }
+
+    if (GAME_STATE.playersRemaining == 2) {
+        updatePlayer1(deltaTime, $container);
+        updatePlayer2(deltaTime, $container);
+    } else if (GAME_STATE.playersRemaining == 1 && GAME_STATE.player1Remaining) {
+        updatePlayer1(deltaTime, $container);
+    } else if (GAME_STATE.playersRemaining == 1 && GAME_STATE.player2Remaining) {
+        updatePlayer2(deltaTime, $container);
+    }
+
     updateLasers(deltaTime, $container);
     updateEnemies(deltaTime, $container);
+    updateEnemyLasers(deltaTime, $container);
 
     GAME_STATE.lastTime = currentTime;
     window.requestAnimationFrame(update);
@@ -397,6 +499,17 @@ function destroyLaser($container, laser) {
 function destroyEnemy($container, enemy) {
     $container.removeChild(enemy.$element);
     enemy.isDead = true;
+}
+
+function destroyPlayer($container, player) {
+    $container.removeChild(player);
+    if (GAME_STATE.playersRemaining == 2) {
+        GAME_STATE.playersRemaining -= 1;
+    } else {
+        GAME_STATE.playersRemaining = 0;
+    }
+    // const audio = new Audio("sound/sfx-lose.ogg");
+    // audio.play();
 }
 
 
