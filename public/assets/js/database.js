@@ -10,7 +10,7 @@ function writeUserData(teamName, time, player1Score, player2Score) {
 }
 
 function readUserData() {
-    data = firebase.database().ref('scoreboard/').orderByChild('time');
+    data = firebase.database().ref('scoreboard').orderByChild('time');
     console.log(data);
 }
 
