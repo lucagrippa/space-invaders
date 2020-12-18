@@ -129,14 +129,15 @@ body {
       .scoreboard {
           border: 1px solid white;
           border-collapse: collapse;
+          color: white;
 
-          th {
-              background-color: white;
-              color: black;
-          }
+          width: 65%;
 
-          tr:nth-child(even) {
-              background-color: #f2f2f2;
+          tr {
+              th {
+                  background-color: white;
+                  color: black;
+              }
           }
       }
 
