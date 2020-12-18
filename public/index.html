@@ -17,6 +17,15 @@
         <div class="game-wrapper">
             <div class="game">
             </div>
+            <div class="team-name-form">
+                <form action="/action_page.php">
+                    <h1>Enter your team name!</h1>
+                    <label for=" team-name">Team name:</label>
+                    <input class="team-name-input" type="text" id="team-name" name="team-name" required>
+                    <br><br>
+                </form>
+                <button class="btn" onclick="checkTeamNameSubmission()" type="button" name="button">Submit</button>
+            </div>
             <div class="congratulations">
                 <h1>Congratulations!</h1>
                 <h2>You won the game</h2>

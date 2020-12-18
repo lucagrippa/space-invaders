@@ -1,3 +1,5 @@
+var submit = false;
+
 // Player 1 Controls Key Codes
 const KEY_CODE_LEFT = 37;
 const KEY_CODE_RIGHT = 39;
@@ -68,6 +70,21 @@ const GAME_STATE = {
     enemies: [],
     enemyLasers: []
 };
+
+const TEAM_SCORE = {
+    teamName: "",
+    time: 0,
+    player1Score: GAME_STATE.score1,
+    player2Score: GAME_STATE.score2
+};
+
+function checkTeamNameSubmission() {
+    TEAM_SCORE.teamName = document.querySelector(".team-name-input").value;
+    document.querySelector(".team-name-form").style.display = "none";
+    submit = true;
+    init();
+    return false;
+}
 
 function objectsIntersect(o1, o2) {
     return !(
@@ -208,6 +225,8 @@ function createEnemyLaser($container, x, y) {
 function init() {
     const $container = document.querySelector(".game");
     const $wrap = document.querySelector(".wrap");
+    const $element = document.querySelector(".team-name-form");
+
     createScoreboard($wrap);
     // we will be needing the container so its good to pass it around so we
     // will only need to retrieve it once
@@ -585,8 +604,8 @@ function onKeyUp(e) {
     }
 }
 
-init();
-
-window.addEventListener("keydown", onKeyDown);
-window.addEventListener("keyup", onKeyUp);
-window.requestAnimationFrame(update);
+if (submit == true) {
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.requestAnimationFrame(update);
+}
