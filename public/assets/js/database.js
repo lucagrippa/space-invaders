@@ -19,7 +19,7 @@ function sortData() {
 function populateScoreboard() {
     for (let i = 1; i < 11; i++) {
         for (let p = 1; p < 5; p++) {
-            document.querySelector(".row" + i + ".column" + p).value = ;
+            //document.querySelector(".row" + i + ".column" + p).value = ;
         }
     }
 }

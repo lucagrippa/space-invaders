@@ -453,6 +453,7 @@ function updateEnemies(deltaTime, $container) {
     if (playerHasLost()) {
         GAME_STATE.gameOver = true;
         document.querySelector(".game-over").style.display = "block";
+        readUserData();
         return;
     }
 }
