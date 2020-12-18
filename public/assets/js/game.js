@@ -446,6 +446,7 @@ function updateEnemies(deltaTime, $container) {
         TEAM_SCORE.player2Score = GAME_STATE.score2;
         document.querySelector(".congratulations").style.display = "block";
         writeUserData(TEAM_SCORE.teamName, TEAM_SCORE.time, TEAM_SCORE.player1Score, TEAM_SCORE.player2Score);
+        readUserData();
         return;
     }
 
