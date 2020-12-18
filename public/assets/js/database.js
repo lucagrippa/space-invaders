@@ -19,16 +19,18 @@ function readUserData() {
             populateScoreboard(childData, i);
             console.log(childKey);
             console.log(childData);
+            console.log(typeof childData);
+
             i++;
         });
     });
 }
 
 function populateScoreboard(data, row) {
-    document.querySelector(".row" + row + ".column1").innerHTML = data[2];
-    document.querySelector(".row" + row + ".column2").innerHTML = data[3];
-    document.querySelector(".row" + row + ".column3").innerHTML = data[0];
-    document.querySelector(".row" + row + ".column4").innerHTML = data[1];
+    document.querySelector(".row" + row + ".column1").innerHTML = data.teamName;
+    document.querySelector(".row" + row + ".column2").innerHTML = data.time;
+    document.querySelector(".row" + row + ".column3").innerHTML = data.player1Score;
+    document.querySelector(".row" + row + ".column4").innerHTML = data.player2Score;
 }
 
 // function populateScoreboard() {
