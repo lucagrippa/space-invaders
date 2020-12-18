@@ -18,7 +18,7 @@
             <div class="game">
             </div>
             <div class="team-name-form">
-                <form action="/action_page.php">
+                <form action="/action_page.php" onkeydown="return event.key != 'Enter';">
                     <h1>Enter your team name!</h1>
                     <label for=" team-name">Team name:</label>
                     <input class="team-name-input" type="text" id="team-name" name="team-name" required>
@@ -40,7 +40,6 @@
         <footer>Player 1: Arrow keys to move, Space to shoot. Player 2: WASD to
             move, shift to shoot. </footer>
     </div>
-    <script src="assets/js/game.js" type="text/javascript"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
 
@@ -65,6 +64,8 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
     </script>
+    <pre id="object"></pre>
+    <script src="assets/js/game.js" type="text/javascript"></script>
 </body>
 
 </html>

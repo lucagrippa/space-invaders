@@ -1,4 +1,5 @@
 var submit = false;
+var startTime;
 
 // Player 1 Controls Key Codes
 const KEY_CODE_LEFT = 37;
@@ -22,6 +23,7 @@ const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 35;
 const PLAYER_TRAVEL_HEIGHT = 125;
 const PLAYER_MAX_SPEED = 250;
+var canShoot = false;
 
 // Laser Constants
 const LASER_MAX_SPEED = 300;
@@ -33,7 +35,14 @@ const ENEMIES_PER_ROW = 10;
 const ENEMY_HORIZONTAL_PADDING = 80;
 const ENEMY_VERTICAL_PADDING = 70;
 const ENEMY_VERTICAL_SPACING = 80;
-const ENEMY_COOLDOWN = 10.0;
+var ENEMY_COOLDOWN = 1000000;
+
+const TEAM_SCORE = {
+    teamName: "",
+    time: 0,
+    player1Score: 0,
+    player2Score: 0
+};
 
 const GAME_STATE = {
     lastTime: Date.now(),
@@ -71,18 +80,17 @@ const GAME_STATE = {
     enemyLasers: []
 };
 
-const TEAM_SCORE = {
-    teamName: "",
-    time: 0,
-    player1Score: GAME_STATE.score1,
-    player2Score: GAME_STATE.score2
-};
-
 function checkTeamNameSubmission() {
     TEAM_SCORE.teamName = document.querySelector(".team-name-input").value;
     document.querySelector(".team-name-form").style.display = "none";
-    submit = true;
-    init();
+    startTime = Date.now();
+    canShoot = true;
+    ENEMY_COOLDOWN = 10;
+    const enemies = GAME_STATE.enemies;
+    for (let i = 0; i < enemies.length; i++) {
+        const enemy = enemies[i];
+        enemy.cooldown = rand(0.5, ENEMY_COOLDOWN);
+    }
     return false;
 }
 
@@ -201,7 +209,7 @@ function createEnemy($container, xloc, yloc) {
     const enemy = {
         xloc,
         yloc,
-        cooldown: rand(0.5, ENEMY_COOLDOWN),
+        cooldown: ENEMY_COOLDOWN,
         $element
     };
     GAME_STATE.enemies.push(enemy);
@@ -209,6 +217,7 @@ function createEnemy($container, xloc, yloc) {
 }
 
 function createEnemyLaser($container, x, y) {
+    console.log("CREATING ENEMY LASERS!");
     const $element = document.createElement("img");
     $element.src = "assets/images/laser/laser-red-7.png";
     $element.className = "enemy-laser";
@@ -241,7 +250,6 @@ function init() {
             createEnemy($container, xloc, yloc);
         }
     }
-
 }
 
 function playerHasWon() {
@@ -294,7 +302,7 @@ function updatePlayer1(deltaTime, $container) {
     );
 
     // Shoot lasers
-    if (GAME_STATE.spacePressed && GAME_STATE.player1Cooldown <= 0) {
+    if (GAME_STATE.spacePressed && GAME_STATE.player1Cooldown <= 0 && canShoot == true) {
         createLaser($container, GAME_STATE.player1X, GAME_STATE.player1Y, KEY_CODE_SPACE);
         GAME_STATE.player1Cooldown = LASER_COOLDOWN;
     }
@@ -335,7 +343,7 @@ function updatePlayer2(deltaTime, $container) {
     );
 
     // Shoot lasers
-    if (GAME_STATE.shiftPressed && GAME_STATE.player2Cooldown <= 0) {
+    if (GAME_STATE.shiftPressed && GAME_STATE.player2Cooldown <= 0 && canShoot == true) {
         createLaser($container, GAME_STATE.player2X, GAME_STATE.player2Y, KEY_CODE_SHIFT);
         GAME_STATE.player2Cooldown = LASER_COOLDOWN;
     }
@@ -432,6 +440,10 @@ function updateEnemies(deltaTime, $container) {
 
     if (playerHasWon()) {
         GAME_STATE.gameOver = true;
+        var delta = Date.now() - startTime;
+        TEAM_SCORE.time = Math.floor(delta / 10) / 100;
+        TEAM_SCORE.player1Score = GAME_STATE.score1;
+        TEAM_SCORE.player2Score = GAME_STATE.score2;
         document.querySelector(".congratulations").style.display = "block";
         return;
     }
@@ -604,8 +616,10 @@ function onKeyUp(e) {
     }
 }
 
-if (submit == true) {
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    window.requestAnimationFrame(update);
-}
+init();
+const preObject = document.getElement('object');
+const dbRefObject = firebase.database().ref().child('object');
+dbRefObject.on('value', snap => console.log(snap.val()));
+window.addEventListener("keydown", onKeyDown);
+window.addEventListener("keyup", onKeyUp);
+window.requestAnimationFrame(update);
