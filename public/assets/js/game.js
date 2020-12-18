@@ -27,7 +27,7 @@ var canShoot = false;
 
 // Laser Constants
 const LASER_MAX_SPEED = 300;
-const LASER_COOLDOWN = 0;
+const LASER_COOLDOWN = 0.25;
 const LASER_LENGTH = 27;
 
 // Enemy Constants

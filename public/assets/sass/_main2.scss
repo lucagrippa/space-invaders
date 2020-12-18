@@ -126,6 +126,20 @@ body {
           animation: pop-in 1s;
       }
 
+      .scoreboard {
+          border: 1px solid white;
+          border-collapse: collapse;
+
+          th {
+              background-color: white;
+              color: black;
+          }
+
+          tr:nth-child(even) {
+              background-color: #f2f2f2;
+          }
+      }
+
       .btn {
           border: 2px solid #36bbf5;
           border-radius: 3px;
