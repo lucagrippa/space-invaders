@@ -47,6 +47,30 @@ body {
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       }
 
+      .leaderboard {
+          border: 1px solid white;
+          border-collapse: collapse;
+          background-color: none;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          margin: 20px;
+
+          th {
+              border: 1px solid white;
+              background-color: white;
+              color: black;
+          }
+
+          td {
+              border: 1px solid white;
+              color: white;
+              padding: 2px 5px;
+          }
+
+          td:nth-child(1) {
+              font-weight: bold;
+          }
+      }
+
       .game {
           width: 800px;
           height: 600px;
@@ -124,21 +148,6 @@ body {
           border-radius: 10px;
           text-align: center;
           animation: pop-in 1s;
-      }
-
-      .scoreboard {
-          border: 1px solid white;
-          border-collapse: collapse;
-          color: white;
-
-          width: 65%;
-
-          tr {
-              th {
-                  background-color: white;
-                  color: black;
-              }
-          }
       }
 
       .btn {
