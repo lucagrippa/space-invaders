@@ -11,14 +11,14 @@ function writeUserData(teamName, time, player1Score, player2Score) {
 
 function readUserData() {
     console.log("reading user data");
-    firebase.database().ref('scoreboard').orderByValue("time").once('value', function(snapshot) {
+    firebase.database().ref('scoreboard').orderByChild("time").once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var childKey = childSnapshot.key;
             console.log(childKey);
             var childData = childSnapshot.val();
             console.log(childData);
         });
-    });
+    }).limitToFirst(10);
 }
 
 function sortData() {
