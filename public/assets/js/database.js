@@ -1,3 +1,5 @@
+var data;
+
 function writeUserData(teamName, time, player1Score, player2Score) {
     firebase.database().ref('scoreboard/' + teamName + Date.now()).set({
         teamName: teamName,
@@ -8,8 +10,8 @@ function writeUserData(teamName, time, player1Score, player2Score) {
 }
 
 function readUserData() {
-    var topUserPostsRef = firebase.database().ref('scoreboard/').orderByChild('time');
-    console.log(topUserPostsRef);
+    data = firebase.database().ref('scoreboard/').orderByChild('time');
+    console.log(data);
 }
 
 function sortData() {
