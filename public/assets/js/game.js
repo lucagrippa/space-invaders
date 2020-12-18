@@ -617,7 +617,7 @@ function onKeyUp(e) {
 }
 
 init();
-const preObject = document.getElement('object');
+const preObject = document.getElementById('object');
 const dbRefObject = firebase.database().ref().child('object');
 dbRefObject.on('value', snap => console.log(snap.val()));
 window.addEventListener("keydown", onKeyDown);
