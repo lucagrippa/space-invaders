@@ -27,7 +27,7 @@ var canShoot = false;
 
 // Laser Constants
 const LASER_MAX_SPEED = 300;
-const LASER_COOLDOWN = 0.25;
+const LASER_COOLDOWN = 0;
 const LASER_LENGTH = 27;
 
 // Enemy Constants
@@ -149,7 +149,7 @@ function createScoreboard($container) {
 
 function createPlayers($container) {
     // Player 1
-    GAME_STATE.player1X = GAME_WIDTH / 4;
+    GAME_STATE.player1X = (GAME_WIDTH * 3) / 4;
     GAME_STATE.player1Y = GAME_HEIGHT - 50;
     const $player1 = document.createElement("img");
     $player1.src = "assets/images/player/player-green-2.png";
@@ -158,7 +158,7 @@ function createPlayers($container) {
     setPosition($player1, GAME_STATE.player1X, GAME_STATE.player1Y);
 
     // Player 2
-    GAME_STATE.player2X = (GAME_WIDTH * 3) / 4;
+    GAME_STATE.player2X = GAME_WIDTH / 4;
     GAME_STATE.player2Y = GAME_HEIGHT - 50;
     const $player2 = document.createElement("img");
     $player2.src = "assets/images/player/player-orange-3.png";
