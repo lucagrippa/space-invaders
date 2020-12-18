@@ -444,16 +444,16 @@ function updateEnemies(deltaTime, $container) {
         TEAM_SCORE.time = Math.floor(delta / 10) / 100;
         TEAM_SCORE.player1Score = GAME_STATE.score1;
         TEAM_SCORE.player2Score = GAME_STATE.score2;
-        document.querySelector(".congratulations").style.display = "block";
         writeUserData(TEAM_SCORE.teamName, TEAM_SCORE.time, TEAM_SCORE.player1Score, TEAM_SCORE.player2Score);
         readUserData();
+        document.querySelector(".congratulations").style.display = "block";
         return;
     }
 
     if (playerHasLost()) {
         GAME_STATE.gameOver = true;
-        document.querySelector(".game-over").style.display = "block";
         readUserData();
+        document.querySelector(".game-over").style.display = "block";
         return;
     }
 }
