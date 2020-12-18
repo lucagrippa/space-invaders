@@ -27,10 +27,12 @@ function readUserData() {
 }
 
 function populateScoreboard(data, row) {
-    document.querySelector(".row" + row + ".column1").innerHTML = data.teamName;
-    document.querySelector(".row" + row + ".column2").innerHTML = data.time;
-    document.querySelector(".row" + row + ".column3").innerHTML = data.player1Score;
-    document.querySelector(".row" + row + ".column4").innerHTML = data.player2Score;
+    for (let i = 0; i < 2; i++) {
+        document.querySelectorAll(".row" + row + ".column1")[i].innerHTML = data.teamName;
+        document.querySelectorAll(".row" + row + ".column2")[i].innerHTML = data.time;
+        document.querySelectorAll(".row" + row + ".column3")[i].innerHTML = data.player1Score;
+        document.querySelectorAll(".row" + row + ".column4")[i].innerHTML = data.player2Score;
+    }
 }
 
 // function populateScoreboard() {
