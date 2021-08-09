@@ -1,7 +1,7 @@
 
 <h1 align="left">Space Invaders</h1>
 
-<!-- [![Visitor](https://visitor-badge.laobi.icu/badge?page_id=gripal.space-invaders)](https://github.com/grippal) [![GitHub followers](https://img.shields.io/github/followers/grippal.svg?style=social&label=Follow)](https://github.com/grippal?tab=followers) -->
+[![Visitor](https://visitor-badge.laobi.icu/badge?page_id=gripal.space-invaders)](https://github.com/grippal) [![GitHub followers](https://img.shields.io/github/followers/grippal.svg?style=social&label=Follow)](https://github.com/grippal?tab=followers)
 
 A fun two-player Space Invaders close I built using JavaScript, HTML, CSS, SCSS, and Firebase. 
 
